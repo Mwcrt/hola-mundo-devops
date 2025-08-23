@@ -1,13 +1,20 @@
-const express = require('express');
-const app = express();
-const PORT = process.env.PORT || 3000;
+const request = require('supertest');
+const app = require('./index');
 
-app.get('/', (req, res) => {
-  res.send('Hola Mundo desde DevOps CI/CD!');
+let server;
+
+beforeAll(() => {
+  server = app.listen(3000); // levantar servidor solo para tests
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+afterAll((done) => {
+  server.close(done); // cerrar servidor al finalizar pruebas
 });
 
-module.exports = app;
+describe('GET /', () => {
+  it('Debe devolver Hola Mundo', async () => {
+    const res = await request(server).get('/');
+    expect(res.text).toBe('Hola Mundo desde DevOps CI/CD!');
+    expect(res.statusCode).toBe(200);
+  });
+});

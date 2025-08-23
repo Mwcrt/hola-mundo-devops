@@ -1,10 +1,8 @@
-const request = require('supertest');
-const app = require('./index');
+const express = require('express');
+const app = express();
 
-describe('GET /', () => {
-  it('Debe devolver Hola Mundo', async () => {
-    const res = await request(app).get('/');
-    expect(res.text).toBe('Hola Mundo desde DevOps CI/CD!');
-    expect(res.statusCode).toBe(200);
-  });
+app.get('/', (req, res) => {
+  res.send('Hola Mundo desde DevOps CI/CD!');
 });
+
+module.exports = app; // exporta la app sin levantar el servidor
